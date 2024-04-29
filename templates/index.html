@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Meta tags -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Title -->
+    <title>Temperature Predictions</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="{{ url_for('static', filename='styles.css') }}" rel="stylesheet">
+    <!-- Plotly JS -->
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('home') }}">Temperature Dashboard</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarContent"
+                aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarContent">
+                <div class="navbar-nav">
+                    <a class="nav-item nav-link" href="{{ url_for('home') }}">Home</a>
+                    <a class="nav-item nav-link" href="{{ url_for('settings') }}">Settings</a>
+                </div>
+                <div class="navbar-nav">
+                    <a class="nav-item nav-link btn btn-danger text-white" href="{{ url_for('logout') }}">Logout</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main content -->
+    <div class="container mt-5">
+        <h2>Temperature Dashboard</h2>
+        <!-- Graph display -->
+        <div id="graph" style="height: 500px;"></div>
+        <!-- Status message -->
+        <p id="statusMessage" class="text-info">Loading sensor status...</p>
+    
+        <!-- Thresholds display -->
+        <div class="row">
+            <div class="col-md-6">
+                <h4>Current Thresholds:</h4>
+                <ul class="list-group">
+                    <li class="list-group-item">Warning Low: <span class="font-weight-bold">{{ warning_temp_low }}°C</span></li>
+                    <li class="list-group-item">Warning High: <span class="font-weight-bold">{{ warning_temp_high }}°C</span></li>
+                    <li class="list-group-item">Critical Low: <span class="font-weight-bold">{{ critical_temp_low }}°C</span></li>
+                    <li class="list-group-item">Critical High: <span class="font-weight-bold">{{ critical_temp_high }}°C</span></li>
+                </ul>
+            </div>
+        </div>
+    
+        <!-- Temperature records and predictions -->
+        <div class="row mt-4">
+            <div class="col-md-6">
+                <h3>Temperature Records For The Last Hour</h3>
+                <div>{{ last_12actual_values|safe }}</div>
+            </div class="row mt-4">
+            <div class="col-md-6">
+                <h3>Predictions for Next Hour</h3>
+                <div>{{ next_12predicted_values|safe }}</div>
+            </div class="row mt-4">
+        </div>
+    </div>
+    
+    <!-- JavaScript -->
+    <script>
+        // Initialize graphs
+        var graphs = {{ graphJSON| safe }};
+        Plotly.newPlot('graph', graphs, {});
+
+        // Event listener for when the DOM is loaded
+        document.addEventListener("DOMContentLoaded", function () {
+            var statusMessage = document.getElementById('statusMessage');
+
+            // Retrieve the current status from the server-side template rendering
+            var currentStatus = "{{ current_status }}";
+
+            // Define formal status messages for the main dashboard
+            const statusMessages = {
+                'normal': 'The sensor is currently operating within normal parameters and will be for the next hour.',
+                'warning': 'Attention: Please check the sensor as it is in a Warning Threshold.',
+                'critical': 'Warning: The sensor has reached a critical threshold!',
+                'default': 'Status currently unavailable.',
+                'warning_predictive': 'Be proactive: The sensor is predicted to reach a warning threshold within the next hour.',
+                'warning_critical': 'Be proactive: The sensor is predicted to reach a critical threshold within the next hour.'
+            };
+
+            // Corresponding classes styling
+            const statusClasses = {
+                'normal': 'text-success h2',
+                'warning': 'text-warning h2',
+                'critical': 'text-danger h2',
+                'default': 'text-secondary h2',
+                'warning_predictive': 'text-primary h2',
+                'warning_critical': 'text-primary h2'
+            };
+
+            // Set the text content and class for the status message based on the current status
+            statusMessage.textContent = statusMessages[currentStatus] || statusMessages['default'];
+            statusMessage.className = statusClasses[currentStatus] || statusClasses['default'];
+        });
+    </script>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.6.0/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
+
+</html>

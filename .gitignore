@@ -1,0 +1,26 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment directories
+Include/
+Lib/
+Scripts/
+etc/
+pyvenv.cfg  # Configuration file for the virtual environment
+
+# pyc files
+*.pyc
+
+# Environment variables file
+.env
+
+# OS generated files
+Thumbs.db  # For Windows
+
+# And for PyCharm:
+.idea/
+# Flask stuff
+instance/
+

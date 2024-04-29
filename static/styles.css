@@ -1,0 +1,25 @@
+body {
+    font-family: 'Arial', sans-serif;
+}
+
+.container {
+    margin-top: 20px;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.btn-custom {
+    margin-top: 20px;
+}
+
+.navbar-brand, .nav-link {
+    font-size: 1.2rem;
+}
+
+.navbar-collapse {
+    justify-content: space-between;
+}
+
+

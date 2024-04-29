@@ -1,0 +1,8 @@
+{
+    "WARNING_TEMP_LOW": 1.0,
+    "WARNING_TEMP_HIGH": 6.0,
+    "CRITICAL_TEMP_LOW": -1.0,
+    "CRITICAL_TEMP_HIGH": 8.0,
+    "EMAIL": "Test@email.com",
+    "PHONE_NUMBER": "0839999999"
+}
